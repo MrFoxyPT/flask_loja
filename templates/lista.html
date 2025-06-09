@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block conteudo %}
+<h1>{{ loja_nome }}</h1>
+<ul>
+{% for item in itens %}
+    {% set chaves_disponiveis = item.chaves | selectattr('disponivel', 'equalto', True) | list %}
+    <li>{{ item.nome }} - {{ item.desenvolvedor }} ({{ item.ano }}) - €{{ item.preco }}
+        {% if chaves_disponiveis %}
+            {% if current_user.is_authenticated %}
+                <a href="{{ url_for('adicionar_carrinho', id=item.id) }}">Adicionar ao Carrinho</a>
+                <a href="{{ url_for('comprar', id=item.id) }}">Comprar Agora</a>
+            {% endif %}
+        {% else %}
+            <span>Indisponível</span>
+        {% endif %}
+        {% if current_user.is_authenticated and current_user.role == 'admin' %}
+            | <a href="{{ url_for('editar', id=item.id) }}">Editar</a>
+            | <a href="{{ url_for('apagar', id=item.id) }}" onclick="return confirm('Tem certeza?')">Apagar</a>
+        {% endif %}
+    </li>
+{% endfor %}
+</ul>
+{% endblock %}

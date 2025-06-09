@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block conteudo %}
+<h1>{{ loja_nome }} - Histórico de Compras</h1>
+<p><a href="{{ url_for('listar') }}">Voltar à Loja</a></p>
+{% if compras %}
+    <ul>
+    {% for compra in compras %}
+        <li>{{ compra.item.nome }} - €{{ compra.preco_pago }} - Chave: {{ compra.chave.chave }} - Comprado em: {{ compra.data_compra.strftime('%d/%m/%Y %H:%M') }}</li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>Você não possui compras registradas.</p>
+{% endif %}
+{% endblock %}
